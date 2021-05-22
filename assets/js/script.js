@@ -1,8 +1,10 @@
 // Gets the html elements we will work with from the page
+var pageEl = document.body;
 var mainEl = document.querySelector("#questions");
 var articleEl = document.querySelector("#options");
+var asideEl = document.querySelector("#confirm");
 var timeEl = document.querySelector(".timer");
-
+console.log(asideEl);
 // creates an i for iterating
 var i = 0;
 
@@ -11,11 +13,11 @@ var timeVar;
 
 // creates an array with the questions, options, and answers
 var qArr = [
-    {question: "Commonly used Data Types do not include:", a: "strings", b: "booleans", c: "alerts", d: "numbers", answer: "alerts"},
-    {question: "A very useful tool during development and debugging for printing content to the debugger is:", a: "JavaScript", b: "terminal/bash", c: "for loops", d: "console.log", answer: "console.log"},
-    {question: "Arrays in JavaScript can be used to store:", a: "numbers and strings", b: "booleans", c: "other arrays", d: "all of the above", answer: "all of the above"},
-    {question: "String values must be enclosed by _______ when being assigned to a variable:", a: "quotes", b: "commas", c: "curly brackets", d: "parenthesis", answer: "quotes"},
-    {question: "The condition in an if/else statement must be enclosed by _______:", a: "quotes", b: "parenthesis", c: "square brackets", d: "curly brackets", answer: "parenthesis"}    
+    {question: "Commonly used Data Types do not include:", options: ["strings", "booleans", "alerts", "numbers"], answer: "alerts"},
+    {question: "A very useful tool during development and debugging for printing content to the debugger is:", options: ["JavaScript", "terminal/bash", "for loops", "console.log"], answer: "console.log"},
+    {question: "Arrays in JavaScript can be used to store:", options: ["numbers and strings", "booleans", "other arrays", "all of the above"], answer: "all of the above"},
+    {question: "String values must be enclosed by _______ when being assigned to a variable:", options: ["quotes", "commas", "curly brackets", "parenthesis"], answer: "quotes"},
+    {question: "The condition in an if/else statement must be enclosed by _______:", options: ["quotes", "parenthesis", "square brackets", "curly brackets"], answer: "parenthesis"}    
             ];
 
 // function to style all of the buttons
@@ -25,20 +27,24 @@ var styleButton = function (button) {
     button.style.color = "antiquewhite";
     button.style.width = "200px";
     button.style.height = "60px";
-    button.style.marginBottom = "10px"
-    button.style.fontSize = "20px"
+    button.style.marginBottom = "10px";
+    button.style.fontSize = "20px";
 }
 
 // Function to remove all of the childern of an element
 var removeElements = function(parent) {
     while(parent.firstChild){
         parent.removeChild(parent.firstChild);
-    }
+    };
 };
 
 // Function that sets the starting state
 var startState = function () {
     
+    removeElements(mainEl);
+    removeElements(articleEl);
+    removeElements(asideEl);
+
     // creates a h1 element sets the text content and appends it as a child of the main element
     var h1El = document.createElement("h1");
     h1El.textContent = "Coding Quiz Challenge";
@@ -57,6 +63,8 @@ var startState = function () {
     startButtonEl.setAttribute("id", "start-button");
     styleButton(startButtonEl);
     articleEl.appendChild(startButtonEl);
+
+    i = 0;
 }
 
 // create a function for the quiz state
@@ -73,9 +81,8 @@ var nextQuestion = function () {
 
     // creates the options
     for (var q = 0; q < 4; q++) {
-        var arr = ["a","b","c","d"];
         var ButtonEl = document.createElement("button");
-        ButtonEl.textContent = (q+1) + ". " + qArr[i][arr[q]];
+        ButtonEl.textContent = (q+1) + ". " + qArr[i].options[q];
         ButtonEl.setAttribute("class", "button");
         styleButton(ButtonEl);
         articleEl.appendChild(ButtonEl);
@@ -99,8 +106,20 @@ var checkAnswer = function (targetEl) {
             timeMan.toString();
             timeEl.innerHTML = "<p>Time:<span id='timer'>" + timeMan + "</span></p>";
             console.log("Wrong Answer");
+            // create an element and append it to the aside element
+            var h2El = document.createElement("h2");
+            h2El.textContent = submit + " Was Incorrect";
+            h2El.style.borderTop = "3px solid grey";
+            h2El.style.color = "grey";
+            h2El.style.fontSize = "50px";
+            asideEl.appendChild(h2El);
     } else {
-        console.log("Correct Answer");
+        var h2El = document.createElement("h2");
+            h2El.textContent = submit + " Was Correct";
+            h2El.style.borderTop = "3px solid grey";
+            h2El.style.color = "grey";
+            h2El.style.fontSize = "50px";
+            asideEl.appendChild(h2El);
     }
 }
 
@@ -137,9 +156,12 @@ var buttonHandler = function (event) {
     }
 
 
-}
+};
 // Calls startState when the page is loaded
 startState();
 
 // Event Listener for the start button
 articleEl.addEventListener("click", buttonHandler);
+articleEl.addEventListener("mousemove", function () {
+    removeElements(asideEl)
+});
