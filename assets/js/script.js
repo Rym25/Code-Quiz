@@ -6,6 +6,9 @@ var timeEl = document.querySelector(".timer");
 // creates an i for iterating
 var i = 0;
 
+// creating a variable for a timer event
+var timeVar;
+
 // creates an array with the questions, options, and answers
 var qArr = [
     {question: "Commonly used Data Types do not include:", a: "strings", b: "booleans", c: "alerts", d: "numbers", answer: "alerts"},
@@ -17,9 +20,13 @@ var qArr = [
 
 // function to style all of the buttons
 var styleButton = function (button) {
-    button.style.borderRadius = "6px";
+    button.style.borderRadius = "10px";
     button.style.backgroundColor = "blueviolet";
-    button.style.color = "antiquewhite"
+    button.style.color = "antiquewhite";
+    button.style.width = "200px";
+    button.style.height = "60px";
+    button.style.marginBottom = "10px"
+    button.style.fontSize = "20px"
 }
 
 // Function to remove all of the childern of an element
@@ -53,7 +60,7 @@ var startState = function () {
 }
 
 // create a function for the quiz state
-var nextQuestion = function (i) {
+var nextQuestion = function () {
     // Clears childern from the main and article elements
     removeElements(mainEl);
     removeElements(articleEl);
@@ -68,35 +75,64 @@ var nextQuestion = function (i) {
     for (var q = 0; q < 4; q++) {
         var arr = ["a","b","c","d"];
         var ButtonEl = document.createElement("button");
-        ButtonEl.textContent = qArr[i][arr[q]];
+        ButtonEl.textContent = (q+1) + ". " + qArr[i][arr[q]];
         ButtonEl.setAttribute("class", "button");
         styleButton(ButtonEl);
         articleEl.appendChild(ButtonEl);
     }
     i++;
-    return i;
+    // return i;
+}
+
+//if an answer is correct
+var checkAnswer = function (targetEl) {
+    var submit = targetEl.textContent.substring(3);
+    console.log(submit);
+    console.log(qArr[(i-1)].answer);
+    if (submit !== qArr[(i-1)].answer) {
+        var time = document.getElementById("timer").textContent;
+            var timeMan = parseInt(time);
+            timeMan -= 10;
+            if (timeMan <= 0) {
+                timeMan = 0;
+            }
+            timeMan.toString();
+            timeEl.innerHTML = "<p>Time:<span id='timer'>" + timeMan + "</span></p>";
+            console.log("Wrong Answer");
+    } else {
+        console.log("Correct Answer");
+    }
 }
 
 var buttonHandler = function (event) {
     // gets the target of the event
     var targetEl = event.target;
-    // does an action based on the event
+    // calls the first question and starts the timer when the start quiz button is pressed 
     if (targetEl.matches("#start-button")){
-        i = nextQuestion(i);
-        var timeVar = setInterval(function () {
+        nextQuestion();
+        // counts down from 75 updating the timer in the top right will stop when it reaches 0
+        timeVar = setInterval(function (stopTime) {
             var time = document.getElementById("timer").textContent;
             var timeMan = parseInt(time);
             timeMan--;
             timeMan.toString();
             if (timeMan <= 0) {
                 clearInterval(timeVar);
-                timeMan = "0";
+                console.log("times up go to score page.");
             }
-            timeEl.innerHTML = "<p>Time:<span id='timer'>" + timeMan + "</span></p>"
+            timeEl.innerHTML = "<p>Time:<span id='timer'>" + timeMan + "</span></p>";
         }, 1000);
-    } else if (targetEl.matches(".button") && i !== 5) {
-        i = nextQuestion(i);
-    } else {
+        
+    } 
+    // gets the next question when an answer is given
+    else if (targetEl.matches(".button") && i !== 5) {
+        checkAnswer(targetEl);
+        nextQuestion();
+    } 
+    // when the last question is answered stops the timer and say the quiz is done
+    else if (targetEl.matches(".button")) {
+        checkAnswer(targetEl);
+        clearInterval(timeVar);
         console.log("done with the quiz");
     }
 
