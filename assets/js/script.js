@@ -163,5 +163,5 @@ startState();
 // Event Listener for the start button
 articleEl.addEventListener("click", buttonHandler);
 articleEl.addEventListener("mousemove", function () {
-    removeElements(asideEl)
+    removeElements(asideEl);
 });
