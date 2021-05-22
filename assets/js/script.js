@@ -43,7 +43,6 @@ var startState = function () {
     
     removeElements(mainEl);
     removeElements(articleEl);
-    removeElements(asideEl);
 
     // creates a h1 element sets the text content and appends it as a child of the main element
     var h1El = document.createElement("h1");
@@ -152,11 +151,58 @@ var buttonHandler = function (event) {
     else if (targetEl.matches(".button")) {
         checkAnswer(targetEl);
         clearInterval(timeVar);
-        console.log("done with the quiz");
+        scoreState();
     }
-
-
+    else if (targetEl.matches("#submit-button")) {
+        var score = document.querySelector("input[name='initials']").value;
+        console.log(score);
+    }
 };
+
+// Function to display the score page
+var scoreState = function () {
+
+    // clears the previous elements
+    removeElements(mainEl);
+    removeElements(articleEl);
+
+    // get the score from the timer
+    var score = document.getElementById("timer").textContent;
+
+    // create h1
+    var h1El = document.createElement("h1");
+    h1El.textContent = "All Done!";
+    h1El.style.textAlign = "Center"
+    mainEl.appendChild(h1El);
+
+    // create paragraph to display the final score
+    var pEl = document.createElement("p");
+    pEl.textContent = "Your final score is " + score;
+    pEl.style.textAlign = "center"
+    mainEl.appendChild(pEl);
+
+    // create an input and button for input submission
+    var divEl = document.createElement("div");
+    divEl.setAttribute("id","initial-submission");
+
+    var inputEl = document.createElement("input");
+    inputEl.setAttribute("type", "text");
+    inputEl.setAttribute("name", "initials");
+    inputEl.setAttribute("placeholder", "Enter Your Initials");
+    divEl.appendChild(inputEl);
+
+    var buttonEl = document.createElement("button");
+    buttonEl.setAttribute("id", "submit-button");
+    buttonEl.textContent = "submit score";
+    buttonEl.style.marginLeft = "5px";
+    buttonEl.style.backgroundColor = "blueviolet";
+    buttonEl.style.color = "antiquewhite";
+    buttonEl.style.borderRadius = "8px"
+    divEl.appendChild(buttonEl);
+
+    articleEl.appendChild(divEl);
+}
+
 // Calls startState when the page is loaded
 startState();
 
