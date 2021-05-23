@@ -25,3 +25,8 @@ THEN the game is over
 WHEN the game is over
 THEN I can save my initials and score
 ```
+
+```
+Site is deployed at: [https://rym25.github.io/Code-Quiz/]
+
+![image](https://user-images.githubusercontent.com/82060073/119279102-b9dbe400-bbe6-11eb-9812-71db854c1686.png)
