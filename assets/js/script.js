@@ -156,11 +156,15 @@ var buttonHandler = function (event) {
     else if (targetEl.matches("#submit-button")) {
         // gets the time and initials entered then puts them into an array and saves the array to local memory. Then sends to the hiscore page. 
         var init = document.querySelector("input[name='initials']").value;
+        if (!init){
+            alert("Please Enter your intials");
+        } else {
         var score = document.getElementById("timer").textContent;
         score = parseInt(score);
         var scoreArr = [init,score];
         localStorage.setItem("Score",JSON.stringify(scoreArr));
         window.location.href = "./hiscore.html";
+        }
     }
 };
 
