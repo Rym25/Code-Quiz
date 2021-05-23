@@ -154,8 +154,13 @@ var buttonHandler = function (event) {
         scoreState();
     }
     else if (targetEl.matches("#submit-button")) {
-        var score = document.querySelector("input[name='initials']").value;
-        console.log(score);
+        // gets the time and initials entered then puts them into an array and saves the array to local memory. Then sends to the hiscore page. 
+        var init = document.querySelector("input[name='initials']").value;
+        var score = document.getElementById("timer").textContent;
+        score = parseInt(score);
+        var scoreArr = [init,score];
+        localStorage.setItem("Score",JSON.stringify(scoreArr));
+        window.location.href = "./hiscore.html";
     }
 };
 
